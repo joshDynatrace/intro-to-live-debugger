@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bugzapper
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bugzapper
+  namespace: bugzapper
+  labels:
+    app: bugzapper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bugzapper
+  template:
+    metadata:
+      labels:
+        app: bugzapper
+    spec:
+      containers:
+      - name: bugzapper
+        image: jhendrick/bugzapper-game:latest
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: DT_LIVEDEBUGGER_REMOTE_ORIGIN
+          value: "https://github.com/Dynatrace/demo-bug-busters"
+        - name: DT_LIVEDEBUGGER_COMMIT
+          value: "main"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bugzapper
+  namespace: bugzapper
+  labels:
+    app: bugzapper
+spec:
+  type: NodePort
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30200
+    protocol: TCP
+    name: http
+  selector:
+    app: bugzapper
