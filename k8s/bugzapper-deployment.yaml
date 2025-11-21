@@ -30,7 +30,7 @@ spec:
         - name: NODE_ENV
           value: "production"
         - name: DT_LIVEDEBUGGER_REMOTE_ORIGIN
-          value: "https://github.com/Dynatrace/demo-bug-busters"
+          value: "https://github.com/joshDynatrace/intro-to-live-debugger"
         - name: DT_LIVEDEBUGGER_COMMIT
           value: "main"
         resources:
