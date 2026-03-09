@@ -29,6 +29,10 @@ spec:
         env:
         - name: JAVA_OPTS
           value: "-Xmx256m -Xms128m"
+        - name: DT_LIVEDEBUGGER_REMOTE_ORIGIN
+          value: "https://github.com/joshDynatrace/intro-to-live-debugger"
+        - name: DT_LIVEDEBUGGER_COMMIT
+          value: "main"          
         resources:
           requests:
             memory: "256Mi"
